@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
   node->get_parameter("port_name", port_name);
   node->get_parameter("frame_id", frame_id);
   
-  RCLCPP_INFO(node->get_logger(), " [ldrobot] SDK Pack Version is v2.1.2");
+  RCLCPP_INFO(node->get_logger(), " [ldrobot] SDK Pack Version is v2.1.3");
   RCLCPP_INFO(node->get_logger(), " [ldrobot] <topic_name>: %s ,<port_name>: %s ,<frame_id>: %s", 
               topic_name.c_str(), port_name.c_str(), frame_id.c_str());
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
       exit(EXIT_FAILURE);
     }
 
-    rclcpp::WallRate r(6); //hz
+    rclcpp::WallRate r(6); //Hz
 
     while (rclcpp::ok()) {
       if (lidar_pkg->IsFrameReady()) {

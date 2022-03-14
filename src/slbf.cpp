@@ -139,25 +139,25 @@ Points2D Slbf::NearFilter(const Points2D &data) const {
 
     if (enable_strict_policy_) {
       if (dis_avg > 8100 && confidence_avg < kConfidenceLow &&
-          n.size() < 1)  //大于8100不过滤
+          n.size() < 1)  
       {
         continue;
       }
       /*else if (dis_avg > 6000 && confidence_avg < kConfidenceLow && n.size() <
-      2)//6000-81000
+      2)
       {
               continue;
       }*/
       else if (dis_avg > 6000 && confidence_avg < kConfidenceLow &&
-               n.size() < 2)  // 3000-6000
+               n.size() < 2) 
       {
         continue;
       } else if (dis_avg > 4000 && confidence_avg < kConfidenceHigh &&
-                 n.size() < 2)  // 1000-3000
+                 n.size() < 2)  
       {
         continue;
       } else if (dis_avg > 300 /*&& confidence_avg < kConfidenceHigh */ &&
-                 n.size() < 2)  // 300-1000
+                 n.size() < 2)  
       {
         continue;
       }
