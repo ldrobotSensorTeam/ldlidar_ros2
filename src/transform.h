@@ -1,6 +1,6 @@
 /**
  * @file transform.h
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (contact@ldrobot.com)
  * @brief  Ranging center conversion with left and right hand system changes App
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD

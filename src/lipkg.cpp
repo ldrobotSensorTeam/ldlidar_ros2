@@ -1,6 +1,6 @@
 /**
  * @file lipkg.cpp
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (contact@ldrobot.com)
  * @brief  LiDAR data protocol processing App
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -62,14 +62,20 @@ uint8_t CalCRC8(const uint8_t *data, uint16_t data_len) {
   return crc;
 }
 
-LiPkg::LiPkg(std::string frame_id, LDVersion ld_version)
+LiPkg::LiPkg(std::string frame_id, LDVersion ld_version, bool laser_scan_dir, bool enable_angle_crop_func,
+      double angle_crop_min, double angle_crop_max)
     : timestamp_(0),
       speed_(0),
       error_times_(0),
       is_frame_ready_(false),
-      is_pkg_ready_(false) {
-  frame_id_ = frame_id;
-  ld_version_ = ld_version;
+      is_pkg_ready_(false),
+      frame_id_(frame_id),
+      ld_version_(ld_version),
+      laser_scan_dir_(laser_scan_dir),
+      enable_angle_crop_func_(enable_angle_crop_func),
+      angle_crop_min_(angle_crop_min),
+      angle_crop_max_(angle_crop_max) {
+  
 }
 
 double LiPkg::GetSpeed(void) { return speed_ / 360.0; }
@@ -137,8 +143,6 @@ bool LiPkg::Parse(const uint8_t *data, long len) {
         float step = diff / (POINT_PER_PACK - 1) / 100.0;
         float start = (double)pkg.start_angle / 100.0;
         float end = (double)(pkg.end_angle % 36000) / 100.0;
-        // std::cout << "start " << start << std::endl;
-        // std::cout << "end " << end << std::endl;
         PointData data;
         for (int i = 0; i < POINT_PER_PACK; i++) {
           data.distance = pkg.point[i].distance;
@@ -148,10 +152,6 @@ bool LiPkg::Parse(const uint8_t *data, long len) {
           }
           data.intensity = pkg.point[i].intensity;
           one_pkg_[i] = data;
-          // std::cout << "data.angle " << data.angle << " data.distance " <<
-          // data.distance
-          //           << " data.intensity " << (int)data.intensity <<
-          //           std::endl;
           frame_tmp_.push_back(PointData(data.angle, data.distance, data.intensity));
         }
         // prevent angle invert
@@ -173,15 +173,13 @@ bool LiPkg::AssemblePacket() {
     // wait for enough data, need enough data to show a circle
     // enough data has been obtained
     if ((n.angle < 20.0) && (last_angle > 340.0)) {
-      // std::cout << "count: " << count << std::endl;
       if ((count * GetSpeed()) > (kPointFrequence * 1.4)) {
         frame_tmp_.erase(frame_tmp_.begin(), frame_tmp_.begin() + count - 1);
         return false;
       }
       data.insert(data.begin(), frame_tmp_.begin(), frame_tmp_.begin() + count);
-      SlTransform trans(ld_version_, true);
+      SlTransform trans(ld_version_, laser_scan_dir_);
       data = trans.Transform(data); // transform raw data to stantard data
-      // std::cout << "data.size() " << data.size() << std::endl;
 
       Slbf sb(speed_);
       tmp = sb.NearFilter(data);
@@ -243,7 +241,17 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
     unsigned int last_index = 0;
     for (auto point : src) {
       float range = point.distance / 1000.f;  // distance unit transform to meters
-      float angle = ANGLE_TO_RADIAN(point.angle);
+      float intensity = point.intensity;      // laser receive intensity
+      float angle_n = point.angle;
+
+      if (enable_angle_crop_func_) { // Angle crop setting, Mask data within the set angle range
+        if ((angle_n >= angle_crop_min_) && (angle_n <= angle_crop_max_)) {
+          range = 0;
+          intensity = 0;
+        }
+      }
+
+      float angle = ANGLE_TO_RADIAN(angle_n);
       unsigned int index = static_cast<unsigned int>((angle - output_.angle_min) / output_.angle_increment);
       if (index < beam_size) {
         // If the current content is Nan, it is assigned directly
@@ -252,7 +260,7 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
           int err = index - last_index;
           if (err == 2){
             output_.ranges[index - 1] = range;
-            output_.intensities[index - 1] = point.intensity;
+            output_.intensities[index - 1] = intensity;
           }
         } else { // Otherwise, only when the distance is less than the current
                 //   value, it can be re assigned
@@ -260,7 +268,7 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
             output_.ranges[index] = range;
           }
         }
-        output_.intensities[index] = point.intensity;
+        output_.intensities[index] = intensity;
         last_index = index;
       }
     }

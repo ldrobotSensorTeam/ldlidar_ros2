@@ -1,6 +1,6 @@
 /**
  * @file cmd_interface_linux.h
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (contact@ldrobot.com)
  * @brief  linux serial port App
  * @version 0.1
  * @date 2021-10-28

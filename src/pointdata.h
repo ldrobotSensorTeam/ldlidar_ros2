@@ -1,6 +1,6 @@
 /**
  * @file pointdata.h
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (contact@ldrobot.com)
  * @brief  lidar point data structure
  *         This code is only applicable to LDROBOT products
  * sold by Shenzhen LDROBOT Co., LTD
@@ -34,8 +34,7 @@ struct PointData {
   // Cartesian coordinate representation
   double x;
   double y;
-  PointData(float angle, uint16_t distance, uint8_t intensity, double x = 0,
-            double y = 0) {
+  PointData(float angle, uint16_t distance, uint8_t intensity, double x = 0, double y = 0) {
     this->angle = angle;
     this->distance = distance;
     this->intensity = intensity;
