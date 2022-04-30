@@ -9,7 +9,7 @@ Panels:
         - /Grid1
         - /LaserScan1
         - /LaserScan1/Topic1
-        - /Axes1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 536
   - Class: rviz_common/Selection
@@ -65,7 +65,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 236
       Min Color: 0; 0; 0
-      Min Intensity: 0
+      Min Intensity: 66
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
@@ -82,11 +82,31 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz_default_plugins/Axes
-      Enabled: true
+      Enabled: false
       Length: 0.5
       Name: Axes
       Radius: 0.029999999329447746
       Reference Frame: <Fixed Frame>
+      Value: false
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_laser:
+          Value: true
+        base_link:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        base_link:
+          base_laser:
+            {}
+      Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
@@ -131,7 +151,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.0024642944335938
+      Distance: 5.291368007659912
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -146,10 +166,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 1.11479651927948
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.1203858852386475
+      Yaw: 3.1903841495513916
     Saved: ~
 Window Geometry:
   Displays:

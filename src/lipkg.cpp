@@ -214,12 +214,12 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
   range_max = 12.0;
   angle_increment = ANGLE_TO_RADIAN(speed_ / kPointFrequence);
   static uint16_t last_times_stamp = 0;
-  uint16_t dealt_times_stamp = 0;
+  float dealt_times_stamp = 0;
   uint16_t tmp_times_stamp = GetTimestamp();
   if (tmp_times_stamp - last_times_stamp < 0) {
-    dealt_times_stamp = tmp_times_stamp - last_times_stamp + 30000;
+    dealt_times_stamp = (tmp_times_stamp - last_times_stamp + 30000) / 1000.f;
   } else {
-    dealt_times_stamp = tmp_times_stamp - last_times_stamp;
+    dealt_times_stamp = (tmp_times_stamp - last_times_stamp) / 1000.f;
   }
   last_times_stamp = tmp_times_stamp;
   // Calculate the number of scanning points
@@ -232,8 +232,12 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
     output_.range_min = range_min;
     output_.range_max = range_max;
     output_.angle_increment = angle_increment;
-    output_.time_increment = dealt_times_stamp;
-    output_.scan_time = 0.0;
+    if (beam_size <= 1) {
+      output_.time_increment = 0;
+    } else {
+      output_.time_increment = dealt_times_stamp / (beam_size - 1);
+    }
+    output_.scan_time = dealt_times_stamp;
     // First fill all the data with Nan
     output_.ranges.assign(beam_size, std::numeric_limits<float>::quiet_NaN());
     output_.intensities.assign(beam_size, std::numeric_limits<float>::quiet_NaN());
@@ -246,8 +250,8 @@ void LiPkg::ToLaserscan(std::vector<PointData> src) {
 
       if (enable_angle_crop_func_) { // Angle crop setting, Mask data within the set angle range
         if ((angle_n >= angle_crop_min_) && (angle_n <= angle_crop_max_)) {
-          range = 0;
-          intensity = 0;
+          range = std::numeric_limits<float>::quiet_NaN();
+          intensity = std::numeric_limits<float>::quiet_NaN();
         }
       }
 

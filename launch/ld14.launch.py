@@ -33,9 +33,8 @@ Parameter Description:
 '''
 
 def generate_launch_description():
-  return LaunchDescription([
-    Node(
-      # LDROBOT LiDAR publisher node
+  # LDROBOT LiDAR publisher node
+  ldlidar_node = Node(
       package='ldlidar_sl_ros2',
       executable='ldlidar_sl_ros2_node',
       name='ldlidar_publisher_ld14',
@@ -50,5 +49,21 @@ def generate_launch_description():
         {'angle_crop_min': 135.0},
         {'angle_crop_max': 225.0}
       ]
-    )
-  ])
+  )
+
+  # base_link to base_laser tf node
+  base_link_to_laser_tf_node = Node(
+    package='tf2_ros',
+    executable='static_transform_publisher',
+    name='base_link_to_base_laser_ld14',
+    arguments=['0','0','0.18','0','0','0','base_link','base_laser']
+  )
+
+
+  # Define LaunchDescription variable
+  ld = LaunchDescription()
+
+  ld.add_action(ldlidar_node)
+  ld.add_action(base_link_to_laser_tf_node)
+
+  return ld
