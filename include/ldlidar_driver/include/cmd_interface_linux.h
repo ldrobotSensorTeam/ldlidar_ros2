@@ -21,8 +21,19 @@
 #define __LINUX_SERIAL_PORT_H__
 
 #include <inttypes.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <memory.h>
 #include <string.h>
+#include <sys/file.h>
+#include <sys/ioctl.h>
+namespace asmtermios {
+#include <linux/termios.h>
+}
+#include <termios.h>
+#include <unistd.h>
 
+#include <iostream>
 #include <atomic>
 #include <condition_variable>
 #include <functional>
@@ -31,20 +42,20 @@
 #include <thread>
 #include <vector>
 
+namespace ldlidar {
+
 class CmdInterfaceLinux {
  public:
-  CmdInterfaceLinux(uint32_t com_baudrate);
+  CmdInterfaceLinux();
   ~CmdInterfaceLinux();
   // open serial port
-  bool Open(std::string &port_name);  
+  bool Open(std::string &port_name, uint32_t com_baudrate);  
   // close serial port
   bool Close();     
   // receive from port channel data                  
   bool ReadFromIO(uint8_t *rx_buf, uint32_t rx_buf_len, uint32_t *rx_len); 
   // transmit data to port channel
   bool WriteToIo(const uint8_t *tx_buf, uint32_t tx_buf_len, uint32_t *tx_len);  
-  // get serial port device infomation
-  // bool GetCmdDevices(std::vector<std::pair<std::string, std::string>> &device_list); 
   // set receive port channel data callback deal with fuction
   void SetReadCallback(std::function<void(const char *, size_t length)> callback) {
     read_callback_ = callback;
@@ -61,6 +72,8 @@ class CmdInterfaceLinux {
   std::function<void(const char *, size_t length)> read_callback_;
   static void RxThreadProc(void *param);
 };
+
+} // namespace ldlidar
 
 #endif  //__LINUX_SERIAL_PORT_H__
 

@@ -1,6 +1,6 @@
 /**
  * @file transform.h
- * @author LDRobot (contact@ldrobot.com)
+ * @author LDRobot (marketing1@ldrobot.com)
  * @brief  Ranging center conversion with left and right hand system changes App
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -24,29 +24,25 @@
 #include <math.h>
 
 #include <algorithm>
-#include <vector>
 
 #include "pointdata.h"
 
-enum class LDVersion {
-  LD_ZERO,     // Zero  generation lidar
-  LD_THREE,    // Third generation lidar
-  LD_EIGHT,    // Eight generation radar
-  LD_FOURTEEN  // Fourteen generation radar
-};
+namespace ldlidar {
 
 class SlTransform {
  private:
-  bool to_right_hand_;
+  bool to_right_hand_ = true;
   double offset_x_;
   double offset_y_;
-  LDVersion version_;
+  LDType version_;
 
  public:
-  SlTransform(LDVersion version, bool to_right_hand_ = false);
+  SlTransform(LDType version, bool to_right_hand_ = false);
   Points2D Transform(const Points2D &data);
   ~SlTransform();
 };
+
+} // namespace ldlidar
 
 #endif  // __TRANSFORM_H
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF

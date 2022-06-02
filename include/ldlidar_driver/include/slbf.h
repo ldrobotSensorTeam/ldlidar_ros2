@@ -1,6 +1,6 @@
 /**
  * @file slbf.h
- * @author LDRobot (contact@ldrobot.com)
+ * @author LDRobot (marketing1@ldrobot.com)
  * @brief   LiDAR near-range filtering algorithm
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -21,11 +21,13 @@
 #ifndef __SLBF_H_
 #define __SLBF_H_
 
-#include <stdint.h>
+#include <math.h>
 
-#include <vector>
+#include <algorithm>
 
 #include "pointdata.h"
+
+namespace ldlidar {
 
 class Slbf {
  private:
@@ -49,6 +51,8 @@ class Slbf {
   void EnableStrictPolicy(bool enable);
   ~Slbf();
 };
+
+} // namespace ldlidar
 
 #endif  // __SLBF_H_
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF

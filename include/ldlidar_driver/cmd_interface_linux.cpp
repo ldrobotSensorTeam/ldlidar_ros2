@@ -19,33 +19,21 @@
 
 #include "cmd_interface_linux.h"
 
-#include <errno.h>
-#include <fcntl.h>
-// #include <libudev.h>
-#include <memory.h>
-#include <string.h>
-#include <sys/file.h>
-#include <sys/ioctl.h>
-namespace asmtermios {
-#include <linux/termios.h>
-}
-#include <termios.h>
-#include <unistd.h>
-
-#include <iostream>
-
-#define MAX_ACK_BUF_LEN 2304000
 int ioctl(int d, int request, ...);  //...
 
-CmdInterfaceLinux::CmdInterfaceLinux(uint32_t com_baudrate)
+namespace ldlidar {
+
+#define MAX_ACK_BUF_LEN 4096
+
+CmdInterfaceLinux::CmdInterfaceLinux()
     : rx_thread_(nullptr), rx_count_(0), read_callback_(nullptr) {
   com_handle_ = -1;
-  com_baudrate_ = com_baudrate;
+  com_baudrate_ = 0;
 }
 
 CmdInterfaceLinux::~CmdInterfaceLinux() { Close(); }
 
-bool CmdInterfaceLinux::Open(std::string &port_name) {
+bool CmdInterfaceLinux::Open(std::string &port_name, uint32_t com_baudrate) {
   int flags = (O_RDWR | O_NOCTTY | O_NONBLOCK);
 
   com_handle_ = open(port_name.c_str(), flags);
@@ -54,6 +42,8 @@ bool CmdInterfaceLinux::Open(std::string &port_name) {
     return false;
   }
 
+  com_baudrate_ = com_baudrate;
+
   struct asmtermios::termios2 options;
   if (ioctl(com_handle_, _IOC(_IOC_READ, 'T', 0x2A, sizeof(struct asmtermios::termios2)), &options)) {
     perror("[ldrobot] TCGETS2    first");
@@ -61,8 +51,8 @@ bool CmdInterfaceLinux::Open(std::string &port_name) {
     return false;
   }
 
-  options.c_cflag |= (tcflag_t)(CLOCAL | CREAD | CS8 | CRTSCTS);
-  options.c_cflag &= (tcflag_t) ~(CSTOPB | PARENB | PARODD);
+  options.c_cflag |= (tcflag_t)(CLOCAL | CREAD | CS8);
+  options.c_cflag &= (tcflag_t) ~(CSTOPB | PARENB);
   options.c_lflag &= (tcflag_t) ~(ICANON | ECHO | ECHOE | ECHOK | ECHONL |
                                   ISIG | IEXTEN);  //|ECHOPRT
   options.c_oflag &= (tcflag_t) ~(OPOST);
@@ -121,42 +111,6 @@ bool CmdInterfaceLinux::Close() {
 
   return true;
 }
-
-// bool CmdInterfaceLinux::GetCmdDevices(
-//     std::vector<std::pair<std::string, std::string>> &device_list) {
-//   struct udev *udev;
-//   struct udev_enumerate *enumerate;
-//   struct udev_list_entry *devices, *dev_list_entry;
-//   struct udev_device *dev;
-
-//   udev = udev_new();
-//   if (!udev) {
-//     return false;
-//   }
-//   enumerate = udev_enumerate_new(udev);
-//   udev_enumerate_add_match_subsystem(enumerate, "tty");
-//   udev_enumerate_scan_devices(enumerate);
-//   devices = udev_enumerate_get_list_entry(enumerate);
-//   udev_list_entry_foreach(dev_list_entry, devices) {
-//     const char *path;
-//     path = udev_list_entry_get_name(dev_list_entry);
-//     dev = udev_device_new_from_syspath(udev, path);
-//     std::string dev_path = std::string(udev_device_get_devnode(dev));
-//     dev = udev_device_get_parent_with_subsystem_devtype(dev, "usb", "usb_device");
-//     if (dev) {
-//       std::pair<std::string, std::string> p;
-//       p.first = dev_path;
-//       p.second = udev_device_get_sysattr_value(dev, "product");
-//       device_list.push_back(p);
-//       udev_device_unref(dev);
-//     } else {
-//       continue;
-//     }
-//   }
-//   udev_enumerate_unref(enumerate);
-//   udev_unref(udev);
-//   return true;
-// }
 
 bool CmdInterfaceLinux::ReadFromIO(uint8_t *rx_buf, uint32_t rx_buf_len,
                                    uint32_t *rx_len) {
@@ -217,5 +171,6 @@ void CmdInterfaceLinux::RxThreadProc(void *param) {
   delete[] rx_buf;
 }
 
+} // namespace ldlidar
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF
  * FILE ********/
