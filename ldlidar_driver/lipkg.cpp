@@ -58,7 +58,7 @@ uint8_t CalCRC8(const uint8_t *data, uint16_t data_len) {
 
 LiPkg::LiPkg()
     : ld_product_type_(LDType::NO_VER),
-      sdk_pack_verison_("v2.2.0"),
+      sdk_pack_verison_("v2.2.1"),
       laser_scan_dir_(false),
       is_frame_ready_(false),
       timestamp_(0),
