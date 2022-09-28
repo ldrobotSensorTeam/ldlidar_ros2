@@ -3,17 +3,6 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 '''
-parameters=[
-        {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
-        {'frame_id': 'base_laser'},
-        {'laser_scan_dir': True},
-        {'enable_angle_crop_func': False},
-        {'angle_crop_min': 135.0},
-        {'angle_crop_max': 225.0}
-      ]
----
 Parameter Description:
 ---
 - Set laser scan directon: 
@@ -41,9 +30,11 @@ def generate_launch_description():
       output='screen',
       parameters=[
         {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
+        {'laser_scan_topic_name': 'scan'},
+        {'point_cloud_2d_topic_name': 'pointcloud2d'},
         {'frame_id': 'base_laser'},
+        {'port_name': '/dev/ttyUSB0'},
+        {'serial_baudrate' : 115200},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},
         {'angle_crop_min': 135.0},

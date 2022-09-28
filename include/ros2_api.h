@@ -23,6 +23,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
+#include <sensor_msgs/msg/point_cloud.hpp>
+#include <sensor_msgs/msg/channel_float32.hpp>
+#include <geometry_msgs/msg/point32.hpp>
 #include <string>
 
 struct LaserScanSetting

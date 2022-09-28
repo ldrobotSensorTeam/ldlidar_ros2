@@ -1,6 +1,6 @@
 /**
  * @file slbf.cpp
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (support@ldrobot.com)
  * @brief  LiDAR near-range filtering algorithm
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -215,7 +215,8 @@ Points2D Slbf::NearFilter(const Points2D &data) const {
     }
 
     double diff_avg = 0;
-    for (int i = 1; i < (int)n.size(); i++) {
+    int n_size = (int)n.size();
+    for (int i = 1; i < n_size; i++) {
       if (n[i].angle > n[i - 1].angle) {
         diff_avg += fabs(n[i].angle - n[i - 1].angle);
       } else {

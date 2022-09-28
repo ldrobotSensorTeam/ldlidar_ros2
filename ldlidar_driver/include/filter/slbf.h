@@ -1,6 +1,6 @@
 /**
  * @file slbf.h
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (support@ldrobot.com)
  * @brief   LiDAR near-range filtering algorithm
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -25,12 +25,12 @@
 
 #include <algorithm>
 
-#include "pointdata.h"
+#include "ldlidar_datatype.h"
 
 namespace ldlidar {
 
 class Slbf {
- private:
+private:
   const int kConfidenceHigh = 200;
   const int kConfidenceMiddle = 150;
   const int kConfidenceLow = 92;
@@ -45,7 +45,7 @@ class Slbf {
   Slbf(const Slbf &) = delete;
   Slbf &operator=(const Slbf &) = delete;
 
- public:
+public:
   Slbf(int speed, bool strict_policy = true);
   Points2D NearFilter(const Points2D &tmp) const;
   void EnableStrictPolicy(bool enable);

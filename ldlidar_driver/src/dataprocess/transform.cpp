@@ -1,6 +1,6 @@
 /**
  * @file transform.cpp
- * @author LDRobot (marketing1@ldrobot.com)
+ * @author LDRobot (support@ldrobot.com)
  * @brief  Ranging center conversion with left and right hand system changes App
  *         This code is only applicable to LDROBOT LiDAR LD00 LD03 LD08 LD14
  * products sold by Shenzhen LDROBOT Co., LTD
@@ -33,16 +33,18 @@ namespace ldlidar {
         \param[out]  data
         \retval      Data after coordinate conversion
 */
-SlTransform::SlTransform(LDType version, bool to_right_hand_) {
+SlTransform::SlTransform(LDType version, bool to_right_hand) {
   switch (version) {
     case LDType::LD_14:
       offset_x_ = 5.9;
       offset_y_ = -20.14;
       break;
     default:
+      offset_x_ = 5.9;
+      offset_y_ = -20.14;
       break;
   }
-  this->to_right_hand_ = to_right_hand_;
+  to_right_hand_ = to_right_hand;
   version_ = version;
 }
 
@@ -85,9 +87,9 @@ Points2D SlTransform::Transform(const Points2D &data) {
     switch (version_) {
       case LDType::LD_14:
         if (n.distance == 0) {
-          tmp2.push_back(PointData(angle, n.distance, 0));
+          tmp2.push_back(PointData(angle, n.distance, 0, n.stamp));
         } else {
-          tmp2.push_back(PointData(angle, n.distance, n.intensity));
+          tmp2.push_back(PointData(angle, n.distance, n.intensity, n.stamp));
         }
         break;
       default:
@@ -100,6 +102,7 @@ Points2D SlTransform::Transform(const Points2D &data) {
 
 SlTransform::~SlTransform() {}
 
-} // namespace ldlidar 
+} // namespace ldlidar
+
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF
  * FILE ********/

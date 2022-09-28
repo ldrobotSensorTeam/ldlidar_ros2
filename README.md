@@ -35,17 +35,6 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 '''
-parameters=[
-        {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
-        {'frame_id': 'base_laser'},
-        {'laser_scan_dir': True},
-        {'enable_angle_crop_func': False},
-        {'angle_crop_min': 135.0},
-        {'angle_crop_max': 225.0}
-      ]
----
 Parameter Description:
 ---
 - Set laser scan directon: 
@@ -57,7 +46,7 @@ Parameter Description:
     1.2. disable angle crop, example: {'enable_angle_crop_func': False}
   2. Angle cropping interval setting:
   - The distance and intensity data within the set angle range will be set to 0.
-  - angle >= 'angle_crop_min' and angle <= 'angle_crop_max' which is [angle_crop_min, angle_crop_max], unit is degress, angle belong to [0,360).
+  - angle >= 'angle_crop_min' and angle <= 'angle_crop_max' which is [angle_crop_min, angle_crop_max], unit is degress.
     example:
       {'angle_crop_min': 135.0}
       {'angle_crop_max': 225.0}
@@ -73,9 +62,11 @@ def generate_launch_description():
       output='screen',
       parameters=[
         {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
+        {'laser_scan_topic_name': 'scan'},
+        {'point_cloud_2d_topic_name': 'pointcloud2d'},
         {'frame_id': 'base_laser'},
+        {'port_name': '/dev/ttyUSB0'},
+        {'serial_baudrate' : 115200},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},
         {'angle_crop_min': 135.0},
@@ -145,11 +136,6 @@ colcon build
 rviz2
 ```
 
-| 产品型号:          | Fixed Frame: | Topic:        |
-| ------------------ | ------------ | ------------- |
-| LDROBOT LiDAR LD14 | base_laser  | scan |
-
-
 # Instructions
 
 > This SDK is only applicable to the LiDAR products sold by Shenzhen LDROBOT Co., LTD. The product models are :
@@ -187,17 +173,6 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 
 '''
-parameters=[
-        {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
-        {'frame_id': 'base_laser'},
-        {'laser_scan_dir': True},
-        {'enable_angle_crop_func': False},
-        {'angle_crop_min': 135.0},
-        {'angle_crop_max': 225.0}
-      ]
----
 Parameter Description:
 ---
 - Set laser scan directon: 
@@ -209,7 +184,7 @@ Parameter Description:
     1.2. disable angle crop, example: {'enable_angle_crop_func': False}
   2. Angle cropping interval setting:
   - The distance and intensity data within the set angle range will be set to 0.
-  - angle >= 'angle_crop_min' and angle <= 'angle_crop_max' which is [angle_crop_min, angle_crop_max], unit is degress, angle belong to [0,360).
+  - angle >= 'angle_crop_min' and angle <= 'angle_crop_max' which is [angle_crop_min, angle_crop_max], unit is degress.
     example:
       {'angle_crop_min': 135.0}
       {'angle_crop_max': 225.0}
@@ -225,9 +200,11 @@ def generate_launch_description():
       output='screen',
       parameters=[
         {'product_name': 'LDLiDAR_LD14'},
-        {'topic_name': 'scan'},
-        {'port_name': '/dev/ttyUSB0'},
+        {'laser_scan_topic_name': 'scan'},
+        {'point_cloud_2d_topic_name': 'pointcloud2d'},
         {'frame_id': 'base_laser'},
+        {'port_name': '/dev/ttyUSB0'},
+        {'serial_baudrate' : 115200},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},
         {'angle_crop_min': 135.0},
@@ -301,7 +278,3 @@ colcon build
 ```bash
 rviz2
 ```
-
-| Product:          | Fixed Frame: | Topic:        |
-| ------------------ | ------------ | ------------- |
-| LDROBOT LiDAR LD14 | base_laser  | scan   |
