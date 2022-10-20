@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-#include "transform.h"
+#include "sl_transform.h"
 
 namespace ldlidar {
 
@@ -37,7 +37,7 @@ SlTransform::SlTransform(LDType version, bool to_right_hand) {
   switch (version) {
     case LDType::LD_14:
       offset_x_ = 5.9;
-      offset_y_ = -20.14;
+      offset_y_ = -18.975571;
       break;
     default:
       offset_x_ = 5.9;
