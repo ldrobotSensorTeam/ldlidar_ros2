@@ -134,9 +134,9 @@ private:
 
   Points2D GetLaserScanData(void);
 
-  void AnalysisLidarIsBlocking(uint16_t lidar_speed_val);
+  // void AnalysisLidarIsBlocking(uint16_t lidar_speed_val);
 
-  void AnalysisLidarIsOcclusion(Points2D& lidar_data);
+  // void AnalysisLidarIsOcclusion(Points2D& lidar_data);
 };
 
 } // namespace ldlidar

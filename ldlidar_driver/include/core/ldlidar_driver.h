@@ -80,7 +80,7 @@ public:
   */
   LidarStatus GetLaserScanData(Points2D& dst, int64_t timeout = 1000);
   
-  bool GetLidarSpinFreq(double& spin_hz);  
+  bool GetLidarScanFreq(double& spin_hz);  
 
   /**
    * @brief register get timestamp handle functional.
