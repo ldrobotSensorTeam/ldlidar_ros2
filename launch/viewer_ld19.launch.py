@@ -13,11 +13,11 @@ def generate_launch_description():
       'rviz2',
       'ldlidar.rviz'
   )
-  
+
   rviz2_node = Node(
       package='rviz2',
       executable='rviz2',
-      name='rviz2_show_ld14',
+      name='rviz2_show_ld19',
       arguments=['-d',rviz2_config],
       output='screen'
   )
@@ -26,7 +26,7 @@ def generate_launch_description():
   ldlidar_launch = IncludeLaunchDescription(
       launch_description_source=PythonLaunchDescriptionSource([
           get_package_share_directory('ldlidar_ros2'),
-          '/launch/ld14.launch.py'
+          '/launch/ld19.launch.py'
       ])
   )
 
@@ -35,5 +35,5 @@ def generate_launch_description():
 
   ld.add_action(ldlidar_launch)
   ld.add_action(rviz2_node)
-  
+
   return ld

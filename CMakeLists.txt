@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ldlidar_sl_ros2)
+project(ldlidar_ros2)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -35,26 +35,14 @@ endif()
 # user add
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/include/core/
-  ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/include/dataprocess/
-  ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/include/filter/
-  ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/include/logger/
-  ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/include/serialcom/
+  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
 )
 
-file(GLOB  LDLIDAR_DRI_CORE ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/src/core/*.cpp)
-file(GLOB  LDLIDAR_DRI_DATARPC ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/src/dataprocess/*.cpp)
-file(GLOB  LDLIDAR_DRI_FILTER ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/src/filter/*.cpp)
-file(GLOB  LDLIDAR_DRI_LOGGER ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/src/logger/*.cpp)
-file(GLOB  LDLIDAR_DRI_SERIAL ${CMAKE_CURRENT_SOURCE_DIR}/ldlidar_driver/src/serialcom/*.cpp)
+file(GLOB  LDLIDAR_DRI_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/sdk/src/*.cpp)
 
 add_executable(${PROJECT_NAME}_node  
   ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp 
-  ${LDLIDAR_DRI_CORE} 
-  ${LDLIDAR_DRI_DATARPC} 
-  ${LDLIDAR_DRI_FILTER} 
-  ${LDLIDAR_DRI_LOGGER} 
-  ${LDLIDAR_DRI_SERIAL}
+  ${LDLIDAR_DRI_SOURCE} 
 )
 ament_target_dependencies(${PROJECT_NAME}_node rclcpp sensor_msgs geometry_msgs)
 target_link_libraries(${PROJECT_NAME}_node pthread)

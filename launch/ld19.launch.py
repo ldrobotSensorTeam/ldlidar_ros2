@@ -26,15 +26,14 @@ def generate_launch_description():
   ldlidar_node = Node(
       package='ldlidar_ros2',
       executable='ldlidar_ros2_node',
-      name='ldlidar_publisher_ld14',
+      name='LD19',
       output='screen',
       parameters=[
-        {'product_name': 'LDLiDAR_LD14'},
-        {'laser_scan_topic_name': 'scan'},
-        {'point_cloud_2d_topic_name': 'pointcloud2d'},
+        {'product_name': 'LDLiDAR_LD19'},
+        {'topic_name': 'scan'},
         {'frame_id': 'base_laser'},
         {'port_name': '/dev/ttyUSB0'},
-        {'serial_baudrate' : 115200},
+        {'port_baudrate': 230400},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},
         {'angle_crop_min': 135.0},
@@ -46,7 +45,7 @@ def generate_launch_description():
   base_link_to_laser_tf_node = Node(
     package='tf2_ros',
     executable='static_transform_publisher',
-    name='base_link_to_base_laser_ld14',
+    name='base_link_to_base_laser_ld19',
     arguments=['0','0','0.18','0','0','0','base_link','base_laser']
   )
 

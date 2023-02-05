@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ldlidar_sl_ros2</name>
+  <name>ldlidar_ros2</name>
   <version>1.0.0</version>
   <description>This is LDLiDAR ROS2 Package</description>
-  <maintainer email="contact@ldrobot.com">linux</maintainer>
+  <maintainer email="support@ldrobot.com">David</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
