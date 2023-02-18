@@ -35,10 +35,10 @@ endif()
 # user add
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/
 )
 
-file(GLOB  LDLIDAR_DRI_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/sdk/src/*.cpp)
+file(GLOB  LDLIDAR_DRI_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/sdk/src/ldlidar_driver/*.cpp)
 
 add_executable(${PROJECT_NAME}_node  
   ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp 

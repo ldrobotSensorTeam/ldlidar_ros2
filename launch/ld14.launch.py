@@ -37,8 +37,10 @@ def generate_launch_description():
         {'serial_baudrate' : 115200},
         {'laser_scan_dir': True},
         {'enable_angle_crop_func': False},
-        {'angle_crop_min': 135.0},
-        {'angle_crop_max': 225.0}
+        {'angle_crop_min': 135.0},  # unit is degress
+        {'angle_crop_max': 225.0},  # unit is degress
+        {'range_min': 0.02}, # unit is meter
+        {'range_max': 8.0}   # unit is meter
       ]
   )
 
