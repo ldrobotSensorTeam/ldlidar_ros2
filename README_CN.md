@@ -8,7 +8,7 @@ mkdir -p ldlidar_ros2_ws/src
 
 cd ldlidar_ros2_ws/src
 
-git clone  xxxxx
+git clone  https://github.com/ldrobotSensorTeam/ldlidar_ros2.git
 
 git submodule update --init --recursive
 ```
@@ -51,8 +51,8 @@ Parameter Description:
 def generate_launch_description():
   # LDROBOT LiDAR publisher node
   ldlidar_node = Node(
-      package='ldlidar_sl_ros2',
-      executable='ldlidar_sl_ros2_node',
+      package='ldlidar_ros2',
+      executable='ldlidar_ros2_node',
       name='ldlidar_publisher_ld14',
       output='screen',
       parameters=[
@@ -117,11 +117,31 @@ colcon build
 - 产品型号为 LDROBOT LiDAR LD14
   - 启动ld14 lidar node:
   ``` bash
-  ros2 launch ldlidar_sl_ros2 ld14.launch.py
+  ros2 launch ldlidar_ros2 ld14.launch.py
   ```
   - 启动ld14 lidar node并显示激光数据在Rviz2上:
   ``` bash
-  ros2 launch ldlidar_sl_ros2 viewer_ld14.launch.py
+  ros2 launch ldlidar_ros2 viewer_ld14.launch.py
+  ```
+
+- 产品型号为 LDROBOT LiDAR LD06
+  - 启动ld06 lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld06.launch.py
+  ```
+  - 启动ld14 lidar node并显示激光数据在Rviz2上:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld06.launch.py
+  ```
+
+- 产品型号为 LDROBOT LiDAR LD19
+  - 启动ld19 lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld19.launch.py
+  ```
+  - 启动ld19 lidar node并显示激光数据在Rviz2上:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld19.launch.py
   ```
 ##   4. 可视化
 

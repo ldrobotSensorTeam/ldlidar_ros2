@@ -8,7 +8,7 @@ mkdir -p ldlidar_ros2_ws/src
 
 cd ldlidar_ros2_ws/src
 
-git clone  xxxxx
+git clone  https://github.com/ldrobotSensorTeam/ldlidar_ros2.git
 
 git submodule update --init --recursive
 ```
@@ -53,8 +53,8 @@ Parameter Description:
 def generate_launch_description():
   # LDROBOT LiDAR publisher node
   ldlidar_node = Node(
-      package='ldlidar_sl_ros2',
-      executable='ldlidar_sl_ros2_node',
+      package='ldlidar_ros2',
+      executable='ldlidar_ros2_node',
       name='ldlidar_publisher_ld14',
       output='screen',
       parameters=[
@@ -122,11 +122,31 @@ colcon build
 - The product is LDROBOT LiDAR LD14
   - start ld14 lidar node:
   ``` bash
-  ros2 launch ldlidar_sl_ros2 ld14.launch.py
+  ros2 launch ldlidar_ros2 ld14.launch.py
   ```
   - start ld14 lidar node and show on the Rviz2:
   ``` bash
-  ros2 launch ldlidar_sl_ros2 viewer_ld14.launch.py
+  ros2 launch ldlidar_ros2 viewer_ld14.launch.py
+  ```
+
+- The product is LDROBOT LiDAR LD06
+  - start ld06 lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld06.launch.py
+  ```
+  - start ld06 lidar node and show on the Rviz2:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld06.launch.py
+  ```
+
+- The product is LDROBOT LiDAR LD19
+  - start ld19 lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld19.launch.py
+  ```
+  - start ld19 lidar node and show on the Rviz2:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld19.launch.py
   ```
 
 ## step 4: Data visualization
