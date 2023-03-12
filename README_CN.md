@@ -124,6 +124,16 @@ colcon build
   ros2 launch ldlidar_ros2 viewer_ld14.launch.py
   ```
 
+- 产品型号为 LDROBOT LiDAR LD14P
+  - 启动ld14p lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld14p.launch.py
+  ```
+  - 启动ld14p lidar node并显示激光数据在Rviz2上:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld14p.launch.py
+  ```
+
 - 产品型号为 LDROBOT LiDAR LD06
   - 启动ld06 lidar node:
   ``` bash

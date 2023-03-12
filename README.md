@@ -129,6 +129,16 @@ colcon build
   ros2 launch ldlidar_ros2 viewer_ld14.launch.py
   ```
 
+- The product is LDROBOT LiDAR LD14P
+  - start ld14p lidar node:
+  ``` bash
+  ros2 launch ldlidar_ros2 ld14p.launch.py
+  ```
+  - start ld14p lidar node and show on the Rviz2:
+  ``` bash
+  ros2 launch ldlidar_ros2 viewer_ld14p.launch.py
+  ```
+
 - The product is LDROBOT LiDAR LD06
   - start ld06 lidar node:
   ``` bash

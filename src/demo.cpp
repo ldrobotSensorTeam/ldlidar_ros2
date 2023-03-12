@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 #include "ros2_api.h"
-#include "ldlidar_driver/ldlidar_driver.h"
+#include "ldlidar_driver/ldlidar_driver_linux.h"
 
 uint64_t GetTimestamp(void);
 
@@ -71,7 +71,8 @@ int main(int argc, char **argv) {
   node->get_parameter("range_min", setting.range_min);
   node->get_parameter("range_max", setting.range_max);
 
-  ldlidar::LDLidarDriver* ldlidar_drv = new ldlidar::LDLidarDriver();
+  ldlidar::LDLidarDriverLinuxInterface* ldlidar_drv = 
+    ldlidar::LDLidarDriverLinuxInterface::Create();
 
   RCLCPP_INFO(node->get_logger(), "LDLiDAR SDK Pack Version is:%s", ldlidar_drv->GetLidarSdkVersionNumber().c_str());
   RCLCPP_INFO(node->get_logger(), "ROS2 param input:");
@@ -95,10 +96,12 @@ int main(int argc, char **argv) {
 
   ldlidar_drv->RegisterGetTimestampFunctional(std::bind(&GetTimestamp)); 
 
-  ldlidar_drv->EnableFilterAlgorithnmProcess(true);
+  ldlidar_drv->EnablePointCloudDataFilter(true);
   
   if(!strcmp(product_name.c_str(),"LDLiDAR_LD14")) {
     lidartypename = ldlidar::LDType::LD_14;
+  } else if (!strcmp(product_name.c_str(), "LDLiDAR_LD14P")) {
+    lidartypename = ldlidar::LDType::LD_14P;
   } else if (!strcmp(product_name.c_str(),"LDLiDAR_LD06")) {
     lidartypename = ldlidar::LDType::LD_06;
   } else if (!strcmp(product_name.c_str(),"LDLiDAR_LD19")) {
@@ -108,18 +111,24 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  if (ldlidar_drv->Start(lidartypename, port_name, serial_baudrate)) {
-    RCLCPP_INFO(node->get_logger(), "ldlidar drv start is success");
+  if (ldlidar_drv->Connect(lidartypename, port_name, serial_baudrate)) {
+    RCLCPP_INFO(node->get_logger(), "ldlidar serial connect is success");
   } else {
-    RCLCPP_ERROR(node->get_logger(), "ldlidar drv start is fail");
+    RCLCPP_ERROR(node->get_logger(), "ldlidar serial connect is fail");
     exit(EXIT_FAILURE);
   }
 
-  if (ldlidar_drv->WaitLidarCommConnect(3500)) {
+  if (ldlidar_drv->WaitLidarComm(3500)) {
     RCLCPP_INFO(node->get_logger(), "ldlidar communication is normal.");
   } else {
     RCLCPP_ERROR(node->get_logger(), "ldlidar communication is abnormal.");
     exit(EXIT_FAILURE);
+  }
+
+  if (ldlidar_drv->Start()) {
+    RCLCPP_INFO(node->get_logger(), "ldlidar driver start is success.");
+  } else {
+    RCLCPP_ERROR(node->get_logger(), "ldlidar driver start is fail.");
   }
 
   // create ldlidar data topic and publisher
@@ -136,7 +145,7 @@ int main(int argc, char **argv) {
   RCLCPP_INFO(node->get_logger(), "start normal, pub lidar data");
 
   while (rclcpp::ok() && 
-    ldlidar::LDLidarDriver::IsOk()) {
+    ldlidar::LDLidarDriver::Ok()) {
   
     switch (ldlidar_drv->GetLaserScanData(laser_scan_points, 1500)){
       case ldlidar::LidarStatus::NORMAL: {
@@ -148,7 +157,6 @@ int main(int argc, char **argv) {
       }
       case ldlidar::LidarStatus::DATA_TIME_OUT: {
         RCLCPP_ERROR(node->get_logger(), "ldlidar point cloud data publish time out, please check your lidar device.");
-        ldlidar_drv->Stop();
         break;
       }
       case ldlidar::LidarStatus::DATA_WAIT: {
@@ -162,9 +170,9 @@ int main(int argc, char **argv) {
   }
 
   ldlidar_drv->Stop();
+  ldlidar_drv->Disconnect();
 
-  delete ldlidar_drv;
-  ldlidar_drv = nullptr;
+  ldlidar::LDLidarDriverLinuxInterface::Destory(ldlidar_drv);
 
   RCLCPP_INFO(node->get_logger(), "ldlidar published is end");
   rclcpp::shutdown();

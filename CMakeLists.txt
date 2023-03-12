@@ -38,14 +38,16 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/
 )
 
-file(GLOB  LDLIDAR_DRI_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/sdk/src/ldlidar_driver/*.cpp)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/sdk)
 
 add_executable(${PROJECT_NAME}_node  
   ${CMAKE_CURRENT_SOURCE_DIR}/src/demo.cpp 
-  ${LDLIDAR_DRI_SOURCE} 
 )
 ament_target_dependencies(${PROJECT_NAME}_node rclcpp sensor_msgs geometry_msgs)
-target_link_libraries(${PROJECT_NAME}_node pthread)
+target_link_libraries(${PROJECT_NAME}_node 
+  pthread
+  ldlidar_driver
+)
 
 # Install 
 install(TARGETS ${PROJECT_NAME}_node
